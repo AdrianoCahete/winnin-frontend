@@ -1,15 +1,13 @@
 import { useQuery } from "@apollo/client";
-import { GET_ANIMES } from "../query";
+import { GET_DEFAULT, GET_FIRST_TEN } from "../query";
 
 function AnimeList() {
-  const { data, loading, error } = useQuery(GET_ANIMES, {
-    variables: { Id: 15125 },
-  });
+  const { data, loading, error } = useQuery(GET_FIRST_TEN, {});
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  let parsedData = Object.values(data);
+  let parsedData = Object.values(data.Page.media);
 
   // Response example
   //   {
@@ -27,14 +25,10 @@ function AnimeList() {
 
   return (
     <div>
-      <details open>
-        <pre>{JSON.stringify(data.Media, null, 2)}</pre>
-      </details>
-
       <ul>
         {parsedData.map((anime) => (
           <li key={anime.id}>
-            [{anime.id}] {anime.title?.english} ({anime.title?.native})
+            [{anime.id}] {anime.title.userPreferred} ({anime.averageScore})
           </li>
         ))}
       </ul>
